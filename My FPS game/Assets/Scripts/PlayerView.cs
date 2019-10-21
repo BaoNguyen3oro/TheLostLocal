@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UI;
-
+using UnityEngine.EventSystems;
 public class PlayerView : MonoBehaviour
 {
     [SerializeField] private string mouseXInputName, mouseYInputName;
@@ -21,7 +22,6 @@ public class PlayerView : MonoBehaviour
         xAxisClamp = 0.0f;
     }
 
-
     private void LockCursor()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -29,8 +29,18 @@ public class PlayerView : MonoBehaviour
 
     private void Update()
     {
+        if (PauseMenu.gameIsPause)
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        else
+        {
+            LockCursor();
+        }
         CameraRotation();
         InteractGuide();
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
     }
 
 
@@ -45,11 +55,14 @@ public class PlayerView : MonoBehaviour
                 if (whatIHit.collider.tag == "Flashlight" && Input.GetKey(KeyCode.E))
                 {
                     flashlight.SetActive(true);
+                    ItemPickup itemPickup = new ItemPickup();
+                    itemPickup.Interact();
                     Destroy(GameObject.FindWithTag("Flashlight"));
                 }
                 if(whatIHit.collider.tag == "Door" && Input.GetKey(KeyCode.E))
                 {
                     door.GetComponent<Animator>().SetBool("open", true);
+                    
                 }
             }
             else

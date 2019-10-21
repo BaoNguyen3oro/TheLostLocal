@@ -5,14 +5,18 @@ using UnityEngine;
 public class PicksUp : MonoBehaviour
 {
     public Transform theDest;
-
+    public Item item;	// Item to put in the inventory if picked up
 
     void OnMouseDown()
     {
-        GetComponent<BoxCollider>().enabled = false;
-        GetComponent<Rigidbody>().useGravity = false;
-        this.transform.position = theDest.position;
-        this.transform.parent = GameObject.Find("Destination").transform;
+        Debug.Log("Picking up " + item.name);
+        bool ok = Inventory.instance.Add(item);   // Add to inventory
+        if (ok)
+        {
+            Destroy(gameObject);    // Destroy item from 
+            Debug.Log("ok");
+        }
+        
     }
 
     void OnMouseUp()

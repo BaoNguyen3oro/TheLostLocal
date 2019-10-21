@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -8,10 +9,12 @@ public class GameManager : MonoBehaviour
     public float restartDelay = 1f;
     public GameObject deadUI;
     public GameObject enemy;
+    public GameObject screenUI;
     private EnemyController enemyController;
     private PlayerMove playerMove;
     private PlayerView playerView;
     private GameObject player;
+    public static bool isDead = false;
 
     void Start()
     {
@@ -22,10 +25,13 @@ public class GameManager : MonoBehaviour
         //EnemyDrop();
     }
 
+
     public void EndGame()
     {
+        isDead = true;
         playerMove.enabled = false;
         enemyController.enabled = false;
+        screenUI.SetActive(false);
         StartCoroutine(DeadScene());
     }
 
